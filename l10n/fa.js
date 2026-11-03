@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "unsplash",
+    "splashd",
     {
     "Splash" : "صفحه‌ی آغازین",
     "These images are provided by %s. Each image has it's own license." : "این تصاویر توسط %s ارائه شده‌اند. هر تصویر مجوز مخصوص به خود را دارد.",

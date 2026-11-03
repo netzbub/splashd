@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "unsplash",
+    "splashd",
     {
     "Saved" : "已保存",
     "Failed" : "失败了",

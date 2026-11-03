@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "unsplash",
+    "splashd",
     {
     "Saved" : "Enrollet",
     "Failed" : "C'hwitet"

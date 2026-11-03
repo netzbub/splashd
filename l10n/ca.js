@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "unsplash",
+    "splashd",
     {
     "Splash" : "Esquitxades",
     "These images are provided by %s. Each image has it's own license." : "Aquestes imatges les proporciona %s. Cada imatge té la seva pròpia llicència.",

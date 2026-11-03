@@ -61,8 +61,9 @@ class ImageController extends Controller
         $names = $provider->isCached() ? $provider->listPool() : [];
 
         if ($names === [] && $provider->isCached()) {
-            // First call after an install or a settings change.
-            $this->settings->refillPool();
+            // First call after an install or a settings change. Throttled,
+            // because this endpoint is public.
+            $this->settings->refillPoolThrottled();
             $names = $provider->listPool();
         }
 

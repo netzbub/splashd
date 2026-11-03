@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "unsplash",
+    "splashd",
     {
     "Splash" : "Приложение за фонови изображения Splash",
     "These images are provided by %s. Each image has it's own license." : "Тези изображения са предоставени от %s. Всяко изображение има свой собствен лиценз.",

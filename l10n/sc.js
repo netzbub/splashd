@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "unsplash",
+    "splashd",
     {
     "Saved" : "Sarvadu",
     "Keywords:" : "Faeddos crae:"

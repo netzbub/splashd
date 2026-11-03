@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "unsplash",
+    "splashd",
     {
     "These images are provided by %s. Each image has it's own license." : "Nende piltide allikaks on %s. Igal pildil on oma litsentsitingimused.",
     "under an open license free of charge" : "tasuta avatud lähtekoodiga litsentsi alusel",

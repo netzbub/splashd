@@ -34,6 +34,11 @@ class SettingsService
     const CHANGE_MODE = 'splashd/change/mode';
     const CHANGE_MODE_DEFAULT = 'request';
 
+    const POOL_LAST_ATTEMPT = 'splashd/pool/lastattempt';
+
+    /** Shortest gap between two refills triggered from the public page. */
+    const POOL_RETRY_SECONDS = 600;
+
     const STYLE_TINT_ALLOWED = 'splashd/style/tint';
     const STYLE_STRENGHT_COLOR = 'splashd/style/strength/color';
     const STYLE_STRENGHT_BLUR = 'splashd/style/strength/blur';
@@ -440,6 +445,24 @@ class SettingsService
             return 0;
         }
         return $provider->fillPool();
+    }
+
+    /**
+     * Refill, but not more often than every POOL_RETRY_SECONDS.
+     *
+     * The image endpoint is public, so an empty pool must not let every
+     * anonymous request start a download run.
+     *
+     * @return int number of images in the pool afterwards
+     */
+    public function refillPoolThrottled(): int
+    {
+        $last = (int)$this->config->getAppValue($this->appName, self::POOL_LAST_ATTEMPT, '0');
+        if ($last > time() - self::POOL_RETRY_SECONDS) {
+            return $this->getPoolCount();
+        }
+        $this->config->setAppValue($this->appName, self::POOL_LAST_ATTEMPT, (string)time());
+        return $this->refillPool();
     }
 
     /**

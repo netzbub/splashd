@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "unsplash",
+    "splashd",
     {
     "Splash" : "Színfolt",
     "These images are provided by %s. Each image has it's own license." : "Ezeket a képeket az %s biztosítja. Minden képnek saját licence van.",

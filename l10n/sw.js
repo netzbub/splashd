@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "unsplash",
+    "splashd",
     {
     "Splash" : "Nyunyiza",
     "These images are provided by %s. Each image has it's own license." : "Picha hizi zimetolewa na %s. Kila picha ina leseni yake.",
