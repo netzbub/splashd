@@ -19,113 +19,81 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
+ * Modified for the Splashd fork: the remote providers were replaced by the
+ * own folder, the bundled images and Openverse.
  */
 
 namespace OCA\Splashd\ProviderHandler;
 
-use OCA\Splashd\Provider\BingWallpaperDaily;
+use OCA\Splashd\Provider\BundledImages;
 use OCA\Splashd\Provider\NextcloudImage;
-use OCA\Splashd\Provider\UnsplashAPI;
-use OCA\Splashd\Provider\WallhavenCC;
-use OCA\Splashd\Provider\WikimediaCommons;
-use OCA\Splashd\Provider\WikimediaCommonsDaily;
+use OCA\Splashd\Provider\Openverse;
+use OCA\Splashd\Provider\OwnFolder;
 use OCP\Files\IAppData;
+use OCP\Files\IRootFolder;
 use OCP\Http\Client\IClientService;
 use OCP\IConfig;
 use Psr\Log\LoggerInterface;
 
 class ProviderDefinitions
 {
+    /** The provider used when the configured one is unknown or unset. */
+    const FALLBACK = 'BundledImages';
 
-    /** @var SettingsService */
-    protected $settings;
+    /** @var Provider[] */
+    protected array $definitions = [];
 
-    /** @var IConfig */
-    protected $config;
-    /**
-     * @var string
-     */
-    protected $appName;
-    /**
-     * @var definitions This variable contains all available provider
-     */
-    protected $definitions = [];
-    /** @var IAppData */
-    private $appData;
-
-    /** @var LoggerInterface */
-    private $logger;
-
-    /** @var IClientService */
-    private $clientService;
-
-    /**
-     * ProviderDefinitions constructor.
-     *
-     * @param String $appName
-     * @param LoggerInterface $logger
-     * @param IConfig $config
-     * @param IAppData $appData
-     * @param IClientService $clientService
-     */
-    function __construct($appName, LoggerInterface $logger, IConfig $config, IAppData $appData, IClientService $clientService)
+    public function __construct(
+        protected string $appName,
+        protected LoggerInterface $logger,
+        protected IConfig $config,
+        protected IAppData $appData,
+        protected IClientService $clientService,
+        protected IRootFolder $rootFolder,
+    )
     {
-
-        $this->appName = $appName;
-        $this->config = $config;
-        $this->appData = $appData;
-        $this->logger = $logger;
-        $this->clientService = $clientService;
-
-        $tmp = [];
-        //add all provider to this array. The logic takes care of the rest.
-        $tmp[] = new UnsplashAPI($this->appName, $logger, $this->config, $appData, "UnsplashAPI", $clientService);
-        $tmp[] = new NextcloudImage($this->appName, $logger, $this->config, $appData, "Nextcloud Image", $clientService);
-        $tmp[] = new WikimediaCommons($this->appName, $logger, $this->config, $appData, "WikimediaCommons", $clientService);
-        $tmp[] = new WikimediaCommonsDaily($this->appName, $logger, $this->config, $appData, "WikimediaCommons - Picture of the Day", $clientService);
-        $tmp[] = new WallhavenCC($this->appName, $logger, $this->config, $appData, "WallhavenCC", $clientService);
-        $tmp[] = new BingWallpaperDaily($this->appName, $logger, $this->config, $appData, "Bing Wallpaper - Picture of the Day", $clientService);
-
-        foreach ($tmp as &$value) {
-            $this->definitions[$value->getName()] = $value;
+        foreach ([OwnFolder::class, BundledImages::class, Openverse::class, NextcloudImage::class] as $class) {
+            $provider = $this->build($class);
+            $this->definitions[$provider->getName()] = $provider;
         }
     }
 
-    /***
-     *  This returns the selected Provider
-     *
-     * @param $name String: Name of the Provider
-     * @return Provider
+    /**
+     * @param class-string<Provider> $class
      */
-    function getProviderByName($name): Provider
+    private function build(string $class): Provider
     {
-
-        if (!array_key_exists($name, $this->definitions)) {
-            $this->logger->warning("Selected provider '{$name}' could not be found. Using Default. Please select an existing provider in the settings!");
-            return new WikimediaCommonsDaily($this->appName, $this->logger, $this->config, $this->appData, "WikimediaCommons - Picture of the Day", $this->clientService);
-        }
-        $provider = $this->definitions[$name];
-        if ($provider == null) {
-            return new WikimediaCommonsDaily($this->appName, $this->logger, $this->config, $this->appData, "WikimediaCommons - Picture of the Day", $this->clientService);
-        }
-        return $this->definitions[$name];
+        // The short class name doubles as the provider name, the app data
+        // folder and the key of its settings.
+        $name = substr($class, strrpos($class, '\\') + 1);
+        return new $class(
+            $this->appName,
+            $this->logger,
+            $this->config,
+            $this->appData,
+            $name,
+            $this->clientService,
+            $this->rootFolder,
+        );
     }
 
     /**
-     * This returns all defined Provider
-     *
-     * @return Array with List of Providers
+     * The provider with that name, or the fallback.
      */
-    function getAllProviderNames()
+    public function getProviderByName($name): Provider
     {
-        $i = 0;
-        $tmp = [];
-        foreach ($this->definitions as &$value) {
-            //array_push($tmp,$value->getName());
-            $tmp[] = $value->getName();
-            $i++;
+        if (isset($this->definitions[$name])) {
+            return $this->definitions[$name];
         }
-        return $tmp;
+        $this->logger->warning('Splashd: provider "' . $name . '" is unknown, using ' . self::FALLBACK);
+        return $this->definitions[self::FALLBACK];
     }
 
+    /**
+     * @return string[]
+     */
+    public function getAllProviderNames(): array
+    {
+        return array_keys($this->definitions);
+    }
 }

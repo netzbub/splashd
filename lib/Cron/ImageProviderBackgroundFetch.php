@@ -23,17 +23,14 @@ class ImageProviderBackgroundFetch extends TimedJob
     )
     {
         parent::__construct($time);
-        $this->logger->info("Initialize ImageProviderBackgroundFetch");
-
         // Run once a day
         $this->setInterval(24 * 3600);
     }
 
     protected function run($arguments)
     {
-        $this->logger->info("ImageProviderBackgroundFetch: start fetch-service");
-        $this->fetchService->fetch();
-        $this->logger->info("ImageProviderBackgroundFetch: ended fetch-service");
+        $count = $this->fetchService->fetch();
+        $this->logger->info('Splashd: daily refill done, ' . $count . ' image(s) in the pool');
     }
 
 }

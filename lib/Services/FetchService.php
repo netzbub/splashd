@@ -32,14 +32,13 @@ class FetchService
     }
 
     /**
-     * Fetch the currently selected provider image
+     * Refill the pool of the currently selected provider.
+     *
+     * @return int number of images in the pool afterwards
      */
-    public function fetch(): void
+    public function fetch(): int
     {
-        $provider = $this->settings->getSelectedImageProvider();
-        if ($provider->isCached()) {
-            $provider->fetchCached();
-        }
+        return $this->settings->refillPool();
     }
 
 }

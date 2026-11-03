@@ -9,97 +9,110 @@ declare(strict_types=1);
 
 namespace OCA\Splashd\Controller;
 
-use OCA\Splashd\Services\FetchService;
 use OCA\Splashd\Services\SettingsService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataDisplayResponse;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\NoSameSiteCookieRequired;
+use OCP\AppFramework\Http\Attribute\NoTwoFactorRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\FileDisplayResponse;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\BackgroundJob\IJobList;
-use OCP\Files\IAppData;
+use OCP\AppFramework\Http\RedirectResponse;
 use OCP\IRequest;
 
 /**
- * Class ImageController
+ * Serves the background image.
+ *
+ * This is the only endpoint the login page reaches, and it hands out nothing
+ * but the scaled copies in the app data: no file names, no paths, no listing
+ * of the source folder.
  *
  * @package OCA\Splashd\Controller
  */
 class ImageController extends Controller
 {
-    /**
-     * ImageController constructor.
-     *
-     * @param                 $appName
-     * @param IRequest $request
-     * @param SettingsService $settings
-     * @param ITimeFactory $timeFactory
-     */
+    /** Where to send the visitor when there is no image at all. */
+    const THEMING_FALLBACK = '/index.php/apps/theming/image/background';
+
     public function __construct(
         $appName,
         IRequest $request,
         private SettingsService $settings,
-        private ITimeFactory $timeFactory,
-        private IAppData $appData,
-        private FetchService $service,
     )
     {
         parent::__construct($appName, $request);
     }
 
     /**
-     * @NoCSRFRequired
-     * @PublicPage
-     * @NoSameSiteCookieRequired
-     * @NoTwoFactorRequired
+     * One image out of the pool.
      *
-     * @return FileDisplayResponse
+     * In mode "request" a different image is picked on every call and the
+     * answer must not be cached, so that each login shows a new background.
+     * In mode "daily" the same image is served all day and may be cached.
      */
-    public function get(): FileDisplayResponse
+    #[PublicPage]
+    #[NoCSRFRequired]
+    #[NoSameSiteCookieRequired]
+    #[NoTwoFactorRequired]
+    public function get(): FileDisplayResponse|RedirectResponse
     {
-        $providername = $this->settings->getSelectedImageProvider()->getName();
-        $appdataFolder = $this->appData->getFolder($providername);
-        $file = $appdataFolder->getFile("background.jpeg");
+        $provider = $this->settings->getSelectedImageProvider();
+        $names = $provider->isCached() ? $provider->listPool() : [];
 
-        return new FileDisplayResponse($file, Http::STATUS_OK, ['Content-Type' => 'image/jpeg']);
+        if ($names === [] && $provider->isCached()) {
+            // First call after an install or a settings change.
+            $this->settings->refillPool();
+            $names = $provider->listPool();
+        }
+
+        if ($names === []) {
+            return new RedirectResponse(self::THEMING_FALLBACK);
+        }
+
+        $daily = $this->settings->getChangeMode() === 'daily';
+        $name = $daily
+            ? $names[crc32(date('Y-m-d')) % count($names)]
+            : $names[random_int(0, count($names) - 1)];
+
+        $file = $provider->getPoolFile($name);
+        if ($file === null) {
+            return new RedirectResponse(self::THEMING_FALLBACK);
+        }
+
+        $response = new FileDisplayResponse($file, Http::STATUS_OK, ['Content-Type' => 'image/jpeg']);
+        if ($daily) {
+            $response->cacheFor(3600);
+        } else {
+            $response->addHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+            $response->addHeader('Pragma', 'no-cache');
+        }
+        return $response;
     }
 
     /**
-     * @NoCSRFRequired
-     * @PublicPage
-     * @NoSameSiteCookieRequired
-     * @NoTwoFactorRequired
+     * Source and licence of the current image source.
      *
-     * @return JSONResponse
+     * Only CC0 and Public Domain Mark are requested from Openverse, so no
+     * attribution is owed; creator and licence are reported anyway.
      */
+    #[PublicPage]
+    #[NoCSRFRequired]
+    #[NoSameSiteCookieRequired]
+    #[NoTwoFactorRequired]
     public function getMetadata(): JSONResponse
     {
         $provider = $this->settings->getSelectedImageProvider();
         $metadata = $provider->getMetadata();
 
-        return new JSONResponse(
-            [
-                'url' => $metadata->getImageUrl(), 
-                'author' => $metadata->getImageAuthor(),
-                'attribution' => $metadata->getAttributionUrl(),
-                'description' => $metadata->getImageDescription(),
-                'source' => $metadata->getSource()
-            ]
-        );
+        $response = new JSONResponse([
+            'url' => $metadata->getImageUrl(),
+            'author' => $metadata->getImageAuthor(),
+            'attribution' => $metadata->getAttributionUrl(),
+            'description' => $metadata->getImageDescription(),
+            'source' => $metadata->getSource(),
+        ]);
+        $response->addHeader('Cache-Control', 'no-store');
+        return $response;
     }
-
-    /**
-     * Creates the appropriate css response for the client.
-     * Also:
-     * see https://github.com/juliushaertl/theming_customcss/blob/master/lib/Controller/ThemingController.php
-     *
-     * @param String $css
-     * @return DataDisplayResponse
-     */
-    private function prepareResponse(string $css): DataDisplayResponse
-    {
-        return new DataDisplayResponse($css, Http::STATUS_OK, ['Content-Type' => 'text/css']);
-    }
-
 }

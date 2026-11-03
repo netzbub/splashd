@@ -1,48 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * @copyright Copyright (c) 2019 Felix Nüsse <felix.nuesse@t-online.de>
- *
- * @license GNU AGPL version 3 or any later version
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * This file is part of the Splashd app
+ * and licensed under the AGPL.
  */
 
 namespace OCA\Splashd\Provider;
 
 use OCA\Splashd\ProviderHandler\Provider;
 
+/**
+ * Falls back to the login background from
+ * Administration settings > Theming. Nothing is cached, the theming app
+ * serves the image itself.
+ */
 class NextcloudImage extends Provider
 {
+    public bool $IS_CACHED = false;
 
-    // Todo: Use URLGenerator. See AdminSettingsController
-    public bool $ALLOW_CUSTOMIZING = false;
-    private string $THEMING_URL = "/index.php/apps/theming/image/background";
-
-    public function getWhitelistResourceUrls(): array
+    protected function collect(): iterable
     {
         return [];
-    }
-
-    public function getRandomImageUrl($size): string
-    {
-        return $this->THEMING_URL;
-    }
-
-    public function getRandomImageUrlBySearchTerm($search, $size): string
-    {
-        return $this->THEMING_URL;
     }
 }

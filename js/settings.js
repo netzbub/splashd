@@ -1,172 +1,145 @@
 (function () {
+
+    let timers = {};
+    let saveUrl = null;
+
     function initialize() {
-        this._timer = [];
-        this.saveUrl = document.getElementById('splashd-settings').dataset.save;
+        const root = document.getElementById('splashd-settings');
+        if (root === null) {
+            return;
+        }
+        saveUrl = root.dataset.save;
 
-        let customizationInputText = document.getElementById('splash-provider-customization');
-        customizationInputText.onkeydown = function (e) {
-            if (e.keyCode === 13) {
-                let key = e.target.dataset.setting,
-                    value = e.target.value,
-                    type = e.target.getAttribute('type');
-                _setValue(key, value, type);
-                e.preventDefault();
+        // Text fields save on Enter and when they lose the focus.
+        for (const id of ['splash-provider-customization', 'splashd-folder-account', 'splashd-folder-path']) {
+            const field = document.getElementById(id);
+            if (field === null) {
+                continue;
             }
-            return true;
-        };
-
-        let refreshCacheButton = document.getElementById('splash-provider-refresh-cache');
-        refreshCacheButton.onclick = function (e) {
-            _setValue(refreshCacheButton.dataset.setting)
-            return true;
-        };
-
-        let settings = document.querySelectorAll('[data-setting]');
-        for (let setting of settings) {
-            setting.addEventListener(
-                'change',
-                (e) => {
-                    let key = e.target.dataset.setting,
-                        value = e.target.value,
-                        type = e.target.getAttribute('type');
-
-                    if (type === 'checkbox') {
-                        value = e.target.checked ? 'true' : 'false';
-                    }
-
-                    if (type === 'select') {
-                        value = e.target.value;
-                    }
-
-                    if (key === 'style/tint') {
-                        let enable = false
-                        if (value === "true") {
-                            enable = true
-                        }
-                        document.getElementById('splashd-style-color-strength').disabled = !enable;
-                    }
-
-                    _setValue(key, value, type);
+            field.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    save(field.dataset.setting, field.value, 'text');
                 }
-            );
+            });
+        }
+
+        const refresh = document.getElementById('splash-provider-refresh-cache');
+        if (refresh !== null) {
+            refresh.addEventListener('click', () => save(refresh.dataset.setting, '', 'button'));
+        }
+
+        for (const setting of document.querySelectorAll('[data-setting]')) {
+            const type = setting.getAttribute('type');
+            if (type === 'text' || type === 'button') {
+                continue;
+            }
+            setting.addEventListener('change', (e) => {
+                let value = e.target.value;
+                if (type === 'checkbox') {
+                    value = e.target.checked ? 'true' : 'false';
+                }
+                if (e.target.dataset.setting === 'style/tint') {
+                    document.getElementById('splashd-style-color-strength').disabled = value !== 'true';
+                }
+                save(e.target.dataset.setting, value, type);
+            });
         }
     }
 
     /**
-     * Update configuration value
+     * Send one setting to the server.
      *
-     * @param key
-     * @param value
+     * @param key setting name
+     * @param value new value
+     * @param type kind of input, decides how the answer is handled
      * @private
      */
-    function _setValue(key, value, type) {
-
-        let headers = {
+    function save(key, value, type) {
+        const options = {
             method: 'POST',
             headers: {
                 'requesttoken': OC.requestToken,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-            }
-        }
+            },
+            body: JSON.stringify({key, value}),
+            redirect: 'error',
+        };
 
-        let body = JSON.stringify({key, value})
-        let options = {headers, body, method: 'POST', redirect: 'error'}
-        let request = new Request(this.saveUrl, options);
-
-        fetch(request, headers)
-            .then(response=> {
-                _showMessage('success');
-                if (type === 'select') {
-                    getCustomization(value)
+        fetch(new Request(saveUrl, options))
+            .then((response) => response.json())
+            .then((data) => {
+                message('success');
+                if (key === 'provider/provider') {
+                    // The licence note and the fields that apply are rendered
+                    // server side, so take the whole page fresh.
+                    window.location.reload();
+                    return;
                 }
-                response.json().then( data => {
-                    if(data.hasOwnProperty("isCached")) {
-                        if(data.isCached) {
-                            document.getElementById('splash-provider-refresh-cache').style.display = null;
-                        } else {
-                            document.getElementById('splash-provider-refresh-cache').style.display = "none";
-                        }
-                    }
-
-                    if(data.hasOwnProperty("provider")) {
-                        let token = document.getElementById('splashd-providertoken')
-                        if(data.provider === "UnsplashAPI") {
-                            token.style.display = null;
-                        } else {
-                            token.style.display = "none";
-                        }
-                    }
-
-                    if(data.hasOwnProperty("imageURL")) {
-                        let preview = document.getElementById("splashd-preview")
-                        preview.src = data.imageURL
-
-                    }
-
-                })
+                apply(data);
             })
             .catch((e) => {
                 console.error(e);
-                _showMessage('error');
+                message('error');
             });
     }
 
     /**
-     * Update configuration value
+     * Update the parts of the page the answer carries.
      *
-     * @param key
-     * @param value
      * @private
      */
-    function getCustomization(providername) {
-        let headers = {
-            method: 'GET',
-            headers: {
-                'requesttoken': OC.requestToken,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+    function apply(data) {
+        if (data.hasOwnProperty('poolCount')) {
+            setCount('splashd-pool-count', data.poolCount,
+                t('splashd', '%n image ready on the server.', '%n images ready on the server.', data.poolCount));
+        }
+        if (data.hasOwnProperty('folderCount')) {
+            setCount('splashd-folder-count', data.folderCount,
+                t('splashd', '%n image found in the folder.', '%n images found in the folder.', data.folderCount));
+        }
+        if (data.hasOwnProperty('imageURL')) {
+            const preview = document.getElementById('splashd-preview');
+            if (preview !== null) {
+                preview.src = data.imageURL;
             }
         }
+    }
 
-        let updateCustomizationUrl = document.getElementById('splashd-settings').dataset.requestupdate
-
-        //todo: build this url better.
-        let apiUrl = updateCustomizationUrl.substr(0, updateCustomizationUrl.lastIndexOf("/") + 1);
-        let options = {headers, method: 'GET', redirect: 'error'}
-        let request = new Request(apiUrl + providername, options);
-
-        fetch(request, headers)
-            .then(res =>
-                res.json())
-            .then(data => {
-                document.getElementById('splash-provider-customization').value = data['customization'];
-            })
-            .then(() => {
-                _showMessage('success');
-            })
-            .catch((e) => {
-                console.error(e);
-                _showMessage('error');
-            });
+    function setCount(id, count, text) {
+        const element = document.getElementById(id);
+        if (element !== null) {
+            element.textContent = text;
+        }
     }
 
     /**
-     * Show save success/fail message
+     * Translate with a plural form, falling back to the plain count when the
+     * translation helper is not available.
      *
-     * @param type
      * @private
      */
-    function _showMessage(type) {
-        let element = document.querySelector(`#splashd-settings .msg.${type}`);
+    function t(app, singular, plural, count) {
+        if (typeof window.n === 'function') {
+            return window.n(app, singular, plural, count);
+        }
+        return (count === 1 ? singular : plural).replace('%n', count);
+    }
 
-        element.classList.remove('active');
+    /**
+     * Show the save success or failure marker.
+     *
+     * @private
+     */
+    function message(type) {
+        const element = document.querySelector(`#splashd-settings .msg.${type}`);
+        if (element === null) {
+            return;
+        }
         element.classList.add('active');
-
-        clearTimeout(this._timer[type]);
-        this._timer[type] = setTimeout(() => {
-            element.classList.remove('active');
-        }, 1000);
+        clearTimeout(timers[type]);
+        timers[type] = setTimeout(() => element.classList.remove('active'), 1000);
     }
 
     initialize();

@@ -22,7 +22,6 @@
         fetch(request, headers)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 addMetadataToDOM(data)
             })
             .catch((e) => {
@@ -33,7 +32,9 @@
 
     function addMetadataToDOM(data) {
 
-        if(data.source == "Nextcloud Image") {
+        // Only the Openverse source has something worth showing. The local
+        // sources need no attribution and get no panel.
+        if (!data.source || data.source.indexOf("Openverse") !== 0) {
             return
         }
 

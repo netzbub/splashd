@@ -6,11 +6,12 @@
 
 namespace OCA\Splashd\Services;
 
-use OCA\Splashd\ProviderHandler\CachedProvider;
 use OCA\Splashd\ProviderHandler\Provider;
 use OCA\Splashd\ProviderHandler\ProviderDefinitions;
 use OCP\Defaults;
+use OCA\Splashd\Provider\OwnFolder;
 use OCP\Files\IAppData;
+use OCP\Files\IRootFolder;
 use OCP\Http\Client\IClientService;
 use OCP\IConfig;
 use Psr\Log\LoggerInterface;
@@ -28,7 +29,10 @@ class SettingsService
     const STYLE_DASHBORAD = 'splashd/style/dashborad';
     const USER_STYLE_DASHBORAD = 'splashd/style/dashborad';
     const PROVIDER_SELECTED = 'splashd/provider/selected';
-    const PROVIDER_DEFAULT = 'Unsplash';
+    const PROVIDER_DEFAULT = 'BundledImages';
+
+    const CHANGE_MODE = 'splashd/change/mode';
+    const CHANGE_MODE_DEFAULT = 'request';
 
     const STYLE_TINT_ALLOWED = 'splashd/style/tint';
     const STYLE_STRENGHT_COLOR = 'splashd/style/strength/color';
@@ -76,7 +80,7 @@ class SettingsService
      * @param LoggerInterface $logger
      * @param IClientService $clientService
      */
-    public function __construct($userId, $appName, IConfig $config, IAppData $appData, Defaults $defaults, LoggerInterface $logger, IClientService $clientService)
+    public function __construct($userId, $appName, IConfig $config, IAppData $appData, Defaults $defaults, LoggerInterface $logger, IClientService $clientService, IRootFolder $rootFolder)
     {
         $this->config = $config;
         $this->userId = $userId;
@@ -85,7 +89,7 @@ class SettingsService
         }
         $this->appName = $appName;
 
-        $this->providerDefinitions = new ProviderDefinitions($this->appName, $logger, $this->config, $appData, $clientService);
+        $this->providerDefinitions = new ProviderDefinitions($this->appName, $logger, $this->config, $appData, $clientService, $rootFolder);
         $this->defaults = $defaults;
     }
 
@@ -153,13 +157,14 @@ class SettingsService
      */
     public function setImageProviderSanitized(string $providername): void
     {
-        $allProvider = $this->getAllImageProvider();
-        foreach ($allProvider as &$value) {
-            if($value == $providername) {
-                $this->config->setAppValue($this->appName, self::PROVIDER_SELECTED, $value);
-            }
+        if (!in_array($providername, $this->getAllImageProvider(), true)) {
+            return;
         }
-
+        $this->config->setAppValue($this->appName, self::PROVIDER_SELECTED, $providername);
+        // Make sure the new provider has images before the next login.
+        if ($this->getPoolCount() === 0) {
+            $this->refillPool();
+        }
     }
 
     /**
@@ -216,7 +221,7 @@ class SettingsService
         $providername = $this->getImageProviderName();
         $provider = $this->providerDefinitions->getProviderByName($providername);
         $provider->setCustomSearchTerms($customization);
-        $this->fetchIfRequired();
+        $this->refillPool();
     }
 
     /**
@@ -365,50 +370,95 @@ class SettingsService
     }
 
     /**
-     * Store the authentication token for the current provider
-     * @param string $token
+     * How often the background changes: on every request or once a day.
      */
-    public function setCurrentProviderToken(string $token)
+    public function getChangeMode(): string
     {
-        $provider = $this->getImageProviderName();
-        $this->config->setAppValue($this->appName, 'splash/provider/' . $provider . '/token', $token);
-        $this->fetchIfRequired();
+        $mode = $this->config->getAppValue($this->appName, self::CHANGE_MODE, self::CHANGE_MODE_DEFAULT);
+        return $mode === 'daily' ? 'daily' : 'request';
     }
 
-    private function fetchIfRequired()
+    public function setChangeMode(string $mode): void
     {
-        $provider = $this->getImageProviderName();
-        $providerToFetch = $this->providerDefinitions->getProviderByName($provider);
-        if ($providerToFetch->isCached()) {
-            $providerToFetch->fetchCached();
-        }
-
+        $this->config->setAppValue($this->appName, self::CHANGE_MODE, $mode === 'daily' ? 'daily' : 'request');
     }
-
 
     /**
-     * Get new image for current provider
+     * The account whose file view the image folder is read through.
      */
-    public function updateCachedBackground()
+    public function getFolderAccount(): string
     {
-        $provider = $this->getImageProviderName();
-        $providerToFetch = $this->providerDefinitions->getProviderByName($provider);
-        if ($providerToFetch->isCached()) {
-            $providerToFetch->deleteCached();
-            $providerToFetch->fetchCached();
-        }
+        return $this->getOwnFolderProvider()->getAccount();
     }
 
+    public function setFolderAccount(string $account): void
+    {
+        $this->getOwnFolderProvider()->setAccount($account);
+        $this->refillPool('OwnFolder');
+    }
 
     /**
-     * Wrapper to check if current provider is cached
+     * The path of the image folder, relative to that account's files.
+     */
+    public function getFolderPath(): string
+    {
+        return $this->getOwnFolderProvider()->getPath();
+    }
+
+    public function setFolderPath(string $path): void
+    {
+        $this->getOwnFolderProvider()->setPath($path);
+        $this->refillPool('OwnFolder');
+    }
+
+    /**
+     * Number of usable images in the configured folder, for the settings page.
+     */
+    public function countFolderImages(): int
+    {
+        return $this->getOwnFolderProvider()->countImages();
+    }
+
+    private function getOwnFolderProvider(): OwnFolder
+    {
+        $provider = $this->providerDefinitions->getProviderByName('OwnFolder');
+        if (!$provider instanceof OwnFolder) {
+            throw new \RuntimeException('Splashd: the OwnFolder provider is missing');
+        }
+        return $provider;
+    }
+
+    /**
+     * Refill the pool of the given provider, or of the selected one.
+     *
+     * @return int number of images in the pool afterwards
+     */
+    public function refillPool(?string $providerName = null): int
+    {
+        $provider = $this->providerDefinitions->getProviderByName($providerName ?? $this->getImageProviderName());
+        if (!$provider->isCached()) {
+            return 0;
+        }
+        return $provider->fillPool();
+    }
+
+    /**
+     * Number of images currently available for the selected provider.
+     */
+    public function getPoolCount(): int
+    {
+        $provider = $this->getSelectedImageProvider();
+        if (!$provider->isCached()) {
+            return 0;
+        }
+        return count($provider->listPool());
+    }
+
+    /**
+     * Whether the selected provider serves from the app data.
      */
     public function isCached(): bool
     {
-        $provider = $this->getImageProviderName();
-        return $this->providerDefinitions->getProviderByName($provider)->isCached();
-
-
+        return $this->getSelectedImageProvider()->isCached();
     }
-
 }

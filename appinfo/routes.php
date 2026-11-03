@@ -20,12 +20,6 @@ return [
 			'url' => '/settings/admin/getCustomization/{providername}',
 			'verb' => 'GET'
 		],
-		// Personal settings (TODO: clean-up / currently unused?)
-		[
-			'name' => 'personal_settings#set', 
-			'url' => '/settings/personal/set',
-			'verb' => 'POST'
-		],
 		// CssController
 		[
 			'name' => 'css#login',

@@ -47,7 +47,7 @@ class PersonalSettings implements ISettings
         $dashboard = $this->settings->getServerStyleDashboardEnabled();
         $login = $this->settings->getServerStyleLoginEnabled();
 
-        if ($this->settings->getImageProviderName() == "Nextcloud Image") {
+        if ($this->settings->getImageProviderName() === "NextcloudImage") {
             $dashboard = false;
             $login = false;
         }

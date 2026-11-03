@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.1.0 - 2026-11-03
+
+First release of the Splashd fork (app id `splashd`), based on Splash 3.2.0
+from the Nextcloud repository.
+
+### Added
+- Image source "own folder": images are read from a folder of this Nextcloud,
+  addressed by account and path. A team folder path works too.
+- Image source "images shipped with the app": the photos in `img/samples`,
+  licensed CC BY 4.0, used as the default so a fresh install shows something.
+- Image source "Openverse", restricted to CC0 and Public Domain Mark. The
+  server downloads the images once a day; no key is needed.
+- Pool of pre-scaled images per source, so the background can change on every
+  visit. New setting for "on every visit" or "once a day".
+- Images are scaled to at most 2560x1600 and re-encoded as JPEG, which strips
+  EXIF, XMP and IPTC.
+
+### Changed
+- Target Nextcloud 35, PHP 8.3 to 8.5.
+- `appinfo/info.xml` now validates against the app schema and carries the SPDX
+  licence identifier required for apps targeting server 31 or higher.
+- The public image endpoint serves only the scaled copies from the app data
+  and sends `Cache-Control: no-store` in per-visit mode.
+- Controller annotations replaced by PHP attributes where touched.
+
+### Removed
+- The remote image sources Unsplash, WallhavenCC, Wikimedia Commons,
+  Wikimedia Picture of the Day and Bing Picture of the Day, together with the
+  API token setting. Their terms either forbid this kind of use or grant no
+  reuse rights, and all of them exposed the visitors of the login page to a
+  third party.
+- The content security policy no longer needs to allow any foreign domain.
+
+
 ## 3.1.0 - 2025-05-20
 ### What's Changed
 * Add NC 31 support by @cociweb in https://github.com/nextcloud/unsplash/pull/165

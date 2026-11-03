@@ -13,6 +13,11 @@ use OCA\Splashd\ProviderHandler\Provider;
 use OCA\Splashd\Services\SettingsService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\NoSameSiteCookieRequired;
+use OCP\AppFramework\Http\Attribute\NoTwoFactorRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataDisplayResponse;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -43,12 +48,8 @@ class CssController extends Controller
         parent::__construct($appName, $request);
     }
 
-    /**
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     *
-     * @return DataDisplayResponse
-     */
+    #[NoAdminRequired]
+    #[NoCSRFRequired]
     public function dashboard(): DataDisplayResponse
     {
         // we use the data-dasboard-background attribute to select the dashboard only when the user selected the default
@@ -68,13 +69,16 @@ class CssController extends Controller
     private function prepareResponse(string $css): DataDisplayResponse
     {
         $response = new DataDisplayResponse($css, Http::STATUS_OK, ['Content-Type' => 'text/css']);
-        // $response->cacheFor(86400);
-        $expires = new \DateTime();
-        $expires->setTimestamp($this->timeFactory->getTime());
-        $expires->add(new \DateInterval('PT24H'));
-        //$response->addHeader('Expires', $expires->format(\DateTime::RFC1123));
-        //$response->addHeader('Pragma', 'cache');
         $response->addHeader('Content-Type', 'text/css');
+
+        if ($this->settings->getChangeMode() === 'daily') {
+            $response->cacheFor(3600);
+        } else {
+            // The stylesheet must be re-read on every page load, otherwise a
+            // cached copy would keep pinning the same background image.
+            $response->addHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+            $response->addHeader('Pragma', 'no-cache');
+        }
         return $response;
     }
 
@@ -153,25 +157,17 @@ class CssController extends Controller
         return $css;
     }
 
-    /**
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     *
-     * @return DataDisplayResponse
-     */
+    #[NoAdminRequired]
+    #[NoCSRFRequired]
     public function header(): DataDisplayResponse
     {
         return $this->prepareResponse($this->mediaQuery("body"));
     }
 
-    /**
-     * @NoCSRFRequired
-     * @PublicPage
-     * @NoSameSiteCookieRequired
-     * @NoTwoFactorRequired
-     *
-     * @return DataDisplayResponse
-     */
+    #[PublicPage]
+    #[NoCSRFRequired]
+    #[NoSameSiteCookieRequired]
+    #[NoTwoFactorRequired]
     public function login(): DataDisplayResponse
     {
         $css = $this->mediaQuery("body#body-login");
