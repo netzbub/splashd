@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * This file is part of the Unsplash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
-namespace OCA\Unsplash\Settings;
+namespace OCA\Splashd\Settings;
 
-use OCA\Unsplash\Services\SettingsService;
+use OCA\Splashd\Services\SettingsService;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IURLGenerator;
 use OCP\Settings\ISettings;
@@ -17,7 +17,7 @@ use OCP\Settings\ISettings;
 /**
  * Class AdminSettings
  *
- * @package OCA\Unsplash\Settings
+ * @package OCA\Splashd\Settings
  */
 class AdminSettings implements ISettings
 {
@@ -39,11 +39,11 @@ class AdminSettings implements ISettings
      */
     public function getForm(): TemplateResponse
     {
-        return new TemplateResponse('unsplash', 'settings/admin', [
-            'saveSettingsUrl' => $this->urlGenerator->linkToRouteAbsolute('unsplash.admin_settings.set'),
+        return new TemplateResponse('splashd', 'settings/admin', [
+            'saveSettingsUrl' => $this->urlGenerator->linkToRouteAbsolute('splashd.admin_settings.set'),
             'requestCustomizationUrl' =>
                 $this->urlGenerator->linkToRouteAbsolute(
-                    'unsplash.admin_settings.getCustomization',
+                    'splashd.admin_settings.getCustomization',
                     array('providername' => $this->settings->getImageProviderName())
                 ),
             'styleLogin' => $this->settings->getServerStyleLoginEnabled(),

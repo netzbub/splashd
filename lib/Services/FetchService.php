@@ -1,10 +1,10 @@
 <?php
 /**
- * This file is part of the Unsplash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
-namespace OCA\Unsplash\Services;
+namespace OCA\Splashd\Services;
 
 use OCP\IConfig;
 use Psr\Log\LoggerInterface;
@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class FetchService
  *
- * @package OCA\Unsplash\Services
+ * @package OCA\Splashd\Services
  */
 class FetchService
 {

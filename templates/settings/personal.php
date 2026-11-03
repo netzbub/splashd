@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Unsplash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
@@ -8,11 +8,11 @@ use OCP\Util;
 
 if (($_['dashboard'] || $_['login']) && ($_['selectedProvider'] != "" || $_['selectedProvider'] != "Nextcloud Image")):
 
-    Util::addStyle('unsplash', 'settings');
+    Util::addStyle('splashd', 'settings');
 
     ?>
 
-    <div class="section" id="unsplash-settings">
+    <div class="section" id="splashd-settings">
         <h2>
             <?php p($l->t('Random Background Images')); ?>
         </h2>

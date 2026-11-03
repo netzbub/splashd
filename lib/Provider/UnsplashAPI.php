@@ -20,10 +20,10 @@
  *
  */
 
-namespace OCA\Unsplash\Provider;
+namespace OCA\Splashd\Provider;
 
-use OCA\Unsplash\ProviderHandler\Provider;
-use OCA\Unsplash\ProviderHandler\ProviderMetadata;
+use OCA\Splashd\ProviderHandler\Provider;
+use OCA\Splashd\ProviderHandler\ProviderMetadata;
 use OCP\Files\GenericFileException;
 use OCP\Files\NotFoundException;
 

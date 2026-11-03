@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * This file is part of the Unsplash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
-namespace OCA\Unsplash\Settings;
+namespace OCA\Splashd\Settings;
 
-use OCA\Unsplash\Services\SettingsService;
+use OCA\Splashd\Services\SettingsService;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Defaults;
 use OCP\Settings\ISettings;
@@ -17,7 +17,7 @@ use OCP\Settings\ISettings;
 /**
  * Class PersonalSettings
  *
- * @package OCA\Unsplash\Controller\Settings
+ * @package OCA\Splashd\Controller\Settings
  */
 class PersonalSettings implements ISettings
 {
@@ -52,7 +52,7 @@ class PersonalSettings implements ISettings
             $login = false;
         }
 
-        return new TemplateResponse('unsplash', 'settings/personal', [
+        return new TemplateResponse('splashd', 'settings/personal', [
             'selectedProvider' => str_replace(' ', '', $this->settings->getImageProviderName()),
             'label' => $this->theming->getEntity(),
             'dashboard' => $dashboard,

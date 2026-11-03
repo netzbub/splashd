@@ -22,7 +22,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Unsplash\ProviderHandler;
+namespace OCA\Splashd\ProviderHandler;
 
 use OCP\Files\IAppData;
 use OCP\Http\Client\IClientService;
@@ -46,7 +46,7 @@ abstract class Provider
     public bool $REQUIRES_AUTH = false;
     public string $DEFAULT_TOKEN = "";
     public bool $IS_CACHED = false;
-    public string $CACHED_URL = "/index.php/apps/unsplash/api/image";
+    public string $CACHED_URL = "/index.php/apps/splashd/api/image";
     public string $DEFAULT_METADATA_URL="";
 
     /**

@@ -11,12 +11,12 @@ test.describe('Login page background', () => {
 
 		// The BeforeTemplateRenderedEventListener injects a <link> pointing to
 		// the unsplash CSS endpoint when the login style is enabled (default).
-		const link = page.locator('link[rel="stylesheet"][href*="/apps/unsplash/api/login.css"]')
+		const link = page.locator('link[rel="stylesheet"][href*="/apps/splashd/api/login.css"]')
 		await expect(link).toHaveCount(1)
 	})
 
 	test('Login CSS endpoint returns background-image CSS', async ({ request }) => {
-		const response = await request.get('/apps/unsplash/api/login.css')
+		const response = await request.get('/apps/splashd/api/login.css')
 
 		expect(response.status()).toBe(200)
 		expect(response.headers()['content-type']).toContain('text/css')

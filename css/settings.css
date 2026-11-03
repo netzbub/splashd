@@ -1,5 +1,5 @@
-#unsplash-settings .msg.error,
-#unsplash-settings .msg.success {
+#splashd-settings .msg.error,
+#splashd-settings .msg.success {
     font-size: 0.65em;
     opacity: 0;
     border-radius: 3px;
@@ -10,12 +10,12 @@
     margin-left: 6px;
 }
 
-#unsplash-settings .msg.error.active,
-#unsplash-settings .msg.success.active {
+#splashd-settings .msg.error.active,
+#splashd-settings .msg.success.active {
     opacity: 1;
 }
 
-#unsplash-settings h2 {
+#splashd-settings h2 {
     position: relative;
 }
 
@@ -24,53 +24,53 @@
 }
 
 
-.unsplash-providerselect, .unsplash-providerselect > p {
+.splashd-providerselect, .splashd-providerselect > p {
     margin-top: 0.5em;
 }
 
-.unsplash-checkboxes {
+.splashd-checkboxes {
     display: flex;
     align-items: center;
 }
 
-.unsplash-checkboxes input {
+.splashd-checkboxes input {
     margin: 0 10px !important;
 }
 
-.unsplash-label {
+.splashd-label {
     display: inline-block;
     min-width: 175px;
 }
 
-.unsplash-input {
+.splashd-input {
     display: inline-block;
     min-width: 250px;
 }
 
-.unsplash-slider {
+.splashd-slider {
     display: flex;
     align-items: center;
 }
 
-.unsplash-slider label {
+.splashd-slider label {
     min-width: 250px;
 }
 
-.unsplash-slider input {
+.splashd-slider input {
     min-width: 250px;
 }
 
-.unsplash-documentation-link {
+.splashd-documentation-link {
     margin-left: 10px;
     font-style: italic;
     color: var(--color-primary);
 }
 
-.unsplash-documentation-link:hover {
+.splashd-documentation-link:hover {
     color: var(--color-primary-hover);
 }
 
-#unsplash-preview {
+#splashd-preview {
     width: 230px;
     height: 140px;
     object-fit: cover;

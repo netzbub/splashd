@@ -20,9 +20,9 @@
  *
  */
 
-namespace OCA\Unsplash\Provider;
+namespace OCA\Splashd\Provider;
 
-use OCA\Unsplash\ProviderHandler\Provider;
+use OCA\Splashd\ProviderHandler\Provider;
 
 class WikimediaCommonsDaily extends Provider
 {

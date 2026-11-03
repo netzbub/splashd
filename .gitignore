@@ -1,5 +1,5 @@
 build
 node_modules
-unsplash
+splashd
 /test-results/
 /playwright-report/

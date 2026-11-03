@@ -1,14 +1,14 @@
 <?php
 /**
- * This file is part of the Unsplash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
-namespace OCA\Unsplash\Services;
+namespace OCA\Splashd\Services;
 
-use OCA\Unsplash\ProviderHandler\CachedProvider;
-use OCA\Unsplash\ProviderHandler\Provider;
-use OCA\Unsplash\ProviderHandler\ProviderDefinitions;
+use OCA\Splashd\ProviderHandler\CachedProvider;
+use OCA\Splashd\ProviderHandler\Provider;
+use OCA\Splashd\ProviderHandler\ProviderDefinitions;
 use OCP\Defaults;
 use OCP\Files\IAppData;
 use OCP\Http\Client\IClientService;
@@ -18,21 +18,21 @@ use Psr\Log\LoggerInterface;
 /**
  * Class SettingsService
  *
- * @package OCA\Unsplash\Services
+ * @package OCA\Splashd\Services
  */
 class SettingsService
 {
 
-    const STYLE_LOGIN = 'unsplash/style/login';
-    const STYLE_LOGIN_HIGH_VISIBILITY = 'unsplash/style/login/highvisibility';
-    const STYLE_DASHBORAD = 'unsplash/style/dashborad';
-    const USER_STYLE_DASHBORAD = 'unsplash/style/dashborad';
-    const PROVIDER_SELECTED = 'unsplash/provider/selected';
+    const STYLE_LOGIN = 'splashd/style/login';
+    const STYLE_LOGIN_HIGH_VISIBILITY = 'splashd/style/login/highvisibility';
+    const STYLE_DASHBORAD = 'splashd/style/dashborad';
+    const USER_STYLE_DASHBORAD = 'splashd/style/dashborad';
+    const PROVIDER_SELECTED = 'splashd/provider/selected';
     const PROVIDER_DEFAULT = 'Unsplash';
 
-    const STYLE_TINT_ALLOWED = 'unsplash/style/tint';
-    const STYLE_STRENGHT_COLOR = 'unsplash/style/strength/color';
-    const STYLE_STRENGHT_BLUR = 'unsplash/style/strength/blur';
+    const STYLE_TINT_ALLOWED = 'splashd/style/tint';
+    const STYLE_STRENGHT_COLOR = 'splashd/style/strength/color';
+    const STYLE_STRENGHT_BLUR = 'splashd/style/strength/blur';
 
     const STYLE_TINT_ALLOWED_DEFAULT = 0; //equals 30%
     const STYLE_STRENGHT_COLOR_DEFAULT = 30; //equals 30%

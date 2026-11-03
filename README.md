@@ -13,10 +13,10 @@ Show a new colorful image on your Loginscreen every day!
       <img src=".meta/unsplash.jpg" width="360vh" />
     </td>
     <td style="border:none">
-      <img src=".meta/unsplash-header.jpg" width="360vh" />
+      <img src=".meta/splashd-header.jpg" width="360vh" />
     </td>
     <td style="border:none">
-      <img src=".meta/unsplash-dash.jpg" width="360vh" />
+      <img src=".meta/splashd-dash.jpg" width="360vh" />
     </td>
   </tr>
 </table>
@@ -34,7 +34,7 @@ Show a new colorful image on your Loginscreen every day!
 
 
 ## Settings
-<img src=".meta/unsplash-settings.png" width="360vh" />
+<img src=".meta/splashd-settings.png" width="360vh" />
 
 ## Contributing
 Anyone is welcome to contribute and help out. However, hate, discrimination and racism are decidedly unwelcome here. If you feel offended by this, you might belong to the group of people who are not welcome. I will not tolerate hate in any way.

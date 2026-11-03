@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * This file is part of the Unsplash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
-namespace OCA\Unsplash\Cron;
+namespace OCA\Splashd\Cron;
 
-use OCA\Unsplash\Services\FetchService;
+use OCA\Splashd\Services\FetchService;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use Psr\Log\LoggerInterface;

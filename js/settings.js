@@ -1,7 +1,7 @@
 (function () {
     function initialize() {
         this._timer = [];
-        this.saveUrl = document.getElementById('unsplash-settings').dataset.save;
+        this.saveUrl = document.getElementById('splashd-settings').dataset.save;
 
         let customizationInputText = document.getElementById('splash-provider-customization');
         customizationInputText.onkeydown = function (e) {
@@ -43,7 +43,7 @@
                         if (value === "true") {
                             enable = true
                         }
-                        document.getElementById('unsplash-style-color-strength').disabled = !enable;
+                        document.getElementById('splashd-style-color-strength').disabled = !enable;
                     }
 
                     _setValue(key, value, type);
@@ -90,7 +90,7 @@
                     }
 
                     if(data.hasOwnProperty("provider")) {
-                        let token = document.getElementById('unsplash-providertoken')
+                        let token = document.getElementById('splashd-providertoken')
                         if(data.provider === "UnsplashAPI") {
                             token.style.display = null;
                         } else {
@@ -99,7 +99,7 @@
                     }
 
                     if(data.hasOwnProperty("imageURL")) {
-                        let preview = document.getElementById("unsplash-preview")
+                        let preview = document.getElementById("splashd-preview")
                         preview.src = data.imageURL
 
                     }
@@ -129,7 +129,7 @@
             }
         }
 
-        let updateCustomizationUrl = document.getElementById('unsplash-settings').dataset.requestupdate
+        let updateCustomizationUrl = document.getElementById('splashd-settings').dataset.requestupdate
 
         //todo: build this url better.
         let apiUrl = updateCustomizationUrl.substr(0, updateCustomizationUrl.lastIndexOf("/") + 1);
@@ -158,7 +158,7 @@
      * @private
      */
     function _showMessage(type) {
-        let element = document.querySelector(`#unsplash-settings .msg.${type}`);
+        let element = document.querySelector(`#splashd-settings .msg.${type}`);
 
         element.classList.remove('active');
         element.classList.add('active');

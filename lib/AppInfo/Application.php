@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 /**
- * This file is part of the Unsplash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
-namespace OCA\Unsplash\AppInfo;
+namespace OCA\Splashd\AppInfo;
 
-use OCA\Unsplash\EventListener\AddContentSecurityPolicyEventListener;
-use OCA\Unsplash\EventListener\BeforeTemplateRenderedEventListener;
+use OCA\Splashd\EventListener\AddContentSecurityPolicyEventListener;
+use OCA\Splashd\EventListener\BeforeTemplateRenderedEventListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -23,11 +23,11 @@ use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 /**
  * Class Application
  *
- * @package OCA\Unsplash\AppInfo
+ * @package OCA\Splashd\AppInfo
  */
 class Application extends App implements IBootstrap
 {
-    public const APP_ID = 'unsplash';
+    public const APP_ID = 'splashd';
 
     /**
      * Application constructor.

@@ -21,14 +21,14 @@
  *
  */
 
-namespace OCA\Unsplash\ProviderHandler;
+namespace OCA\Splashd\ProviderHandler;
 
-use OCA\Unsplash\Provider\BingWallpaperDaily;
-use OCA\Unsplash\Provider\NextcloudImage;
-use OCA\Unsplash\Provider\UnsplashAPI;
-use OCA\Unsplash\Provider\WallhavenCC;
-use OCA\Unsplash\Provider\WikimediaCommons;
-use OCA\Unsplash\Provider\WikimediaCommonsDaily;
+use OCA\Splashd\Provider\BingWallpaperDaily;
+use OCA\Splashd\Provider\NextcloudImage;
+use OCA\Splashd\Provider\UnsplashAPI;
+use OCA\Splashd\Provider\WallhavenCC;
+use OCA\Splashd\Provider\WikimediaCommons;
+use OCA\Splashd\Provider\WikimediaCommonsDaily;
 use OCP\Files\IAppData;
 use OCP\Http\Client\IClientService;
 use OCP\IConfig;

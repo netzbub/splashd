@@ -116,7 +116,7 @@
 
 ## 1.2.1 - 2021-01-19
 ### Changed
-- Use proper unsplash-links for dashboard
+- Use proper splashd-links for dashboard
 - Server Compatibility (Nextcloud 20)
 
 ## 1.2.0 - 2021-01-16

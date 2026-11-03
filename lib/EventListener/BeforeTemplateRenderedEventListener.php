@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * This file is part of the Unpslash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
-namespace OCA\Unsplash\EventListener;
+namespace OCA\Splashd\EventListener;
 
-use OCA\Unsplash\Services\SettingsService;
+use OCA\Splashd\Services\SettingsService;
 use OCP\AppFramework\Http\Events\BeforeLoginTemplateRenderedEvent;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\EventDispatcher\Event;
@@ -88,14 +88,14 @@ class BeforeTemplateRenderedEventListener implements IEventListener
      */
     private function addHeaderFor(string $target): void
     {
-        $linkToCSS = $this->urlGenerator->linkToRouteAbsolute('unsplash.css.' . $target);
+        $linkToCSS = $this->urlGenerator->linkToRouteAbsolute('splashd.css.' . $target);
 
         Util::addHeader('link', [
             'rel' => 'stylesheet',
             'href' => $linkToCSS,
         ]);
 
-        Util::addStyle('unsplash', $target . '_static');
+        Util::addStyle('splashd', $target . '_static');
     }
 
     /**
@@ -104,8 +104,8 @@ class BeforeTemplateRenderedEventListener implements IEventListener
      */
     private function addMetadata(): void
     {
-        Util::addScript('unsplash', "metadata");
-        Util::addStyle('unsplash', "metadata");
+        Util::addScript('splashd', "metadata");
+        Util::addStyle('splashd', "metadata");
     }
 
 }

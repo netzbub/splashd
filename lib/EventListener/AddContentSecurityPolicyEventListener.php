@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 /**
- * This file is part of the Unpslash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
-namespace OCA\Unsplash\EventListener;
+namespace OCA\Splashd\EventListener;
 
 use OCP\AppFramework\Http\ContentSecurityPolicy;
-use OCA\Unsplash\Services\SettingsService;
+use OCA\Splashd\Services\SettingsService;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Security\CSP\AddContentSecurityPolicyEvent;

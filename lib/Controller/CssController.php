@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 /**
- * This file is part of the Unsplash App
+ * This file is part of the Splashd app
  * and licensed under the AGPL.
  */
 
-namespace OCA\Unsplash\Controller;
+namespace OCA\Splashd\Controller;
 
-use OCA\Unsplash\ProviderHandler\Provider;
-use OCA\Unsplash\Services\SettingsService;
+use OCA\Splashd\ProviderHandler\Provider;
+use OCA\Splashd\Services\SettingsService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataDisplayResponse;
@@ -21,7 +21,7 @@ use OCP\IRequest;
 /**
  * Class CssController
  *
- * @package OCA\Unsplash\Controller
+ * @package OCA\Splashd\Controller
  */
 class CssController extends Controller
 {

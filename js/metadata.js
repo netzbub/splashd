@@ -8,7 +8,7 @@
      */
     function loadMetadata() {
 
-        var metadata = OC.generateUrl('/apps/unsplash/api/metadata');
+        var metadata = OC.generateUrl('/apps/splashd/api/metadata');
         let headers = {
             method: 'GET',
             headers: {
@@ -46,12 +46,12 @@
 
 
         // First, prepare all styles
-        source.classList = "unsplash-metadata-text unsplash-metadata-title"
-        author.classList = "unsplash-metadata-text"
-        description.classList = "unsplash-metadata-text"
-        info.classList = "unsplash-icon-info"
+        source.classList = "splashd-metadata-text splashd-metadata-title"
+        author.classList = "splashd-metadata-text"
+        description.classList = "splashd-metadata-text"
+        info.classList = "splashd-icon-info"
         //dash-panel for dashboard, guest-box for login
-        div.classList = "dash-panel guest-box unsplash-floating-bottom-right"
+        div.classList = "dash-panel guest-box splashd-floating-bottom-right"
 
 
         // Third, add links

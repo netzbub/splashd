@@ -1,7 +1,7 @@
 {
-	"name": "unsplash",
-	"description": "Random background image app for Nextcloud",
-	"homepage": "https://github.com/nextcloud/unsplash",
+	"name": "splashd",
+	"description": "Changing login background from your own folder, for Nextcloud",
+	"homepage": "https://github.com/netzbub/splashd",
 	"license": "agpl",
 	"private": true,
 	"scripts": {
