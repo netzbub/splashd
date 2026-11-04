@@ -19,5 +19,9 @@ CC BY 4.0 permits attribution by pseudonym (section 3(a)(1)(A) of the licence),
 so this wording satisfies the licence; the legal name of the photographer is
 not required.
 
-Files: astern.jpg, avocado.jpg, bluete.jpg, butterfly.jpg, neuffen.jpg,
-rose.jpg, shadows.jpg, stiefmuetterchen.jpg, vosa.jpg
+This applies to every `.jpg` file in this folder. Each one carries the same
+statement in its own metadata — `Artist`, `Copyright`, XMP `dc:creator`,
+`dc:rights`, `xmpRights` and the Creative Commons `cc:` namespace — so the
+licence travels with the file even when it is copied out of this app. No other
+metadata is present: the images were re-encoded for this purpose, which removed
+camera data, capture time, GPS coordinates and editing history.

@@ -8,8 +8,12 @@ from the Nextcloud repository.
 ### Added
 - Image source "own folder": images are read from a folder of this Nextcloud,
   addressed by account and path. A team folder path works too.
-- Image source "images shipped with the app": the photos in `img/samples`,
+- Image source "images shipped with the app": 30 photos in `img/samples`,
   licensed CC BY 4.0, used as the default so a fresh install shows something.
+  Each file carries its licence in its own metadata and nothing else: no
+  camera data, no capture time, no GPS coordinates, no editing history. More
+  images are shipped than fit into the pool, so every refill draws a fresh
+  random selection from them.
 - Image source "Openverse", restricted to CC0 and Public Domain Mark. The
   server downloads the images once a day; no key is needed.
 - Pool of pre-scaled images per source, so the background can change on every

@@ -30,7 +30,9 @@ class BundledImages extends Provider
         }
 
         $files = glob($dir . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE) ?: [];
-        sort($files);
+        // More images may be shipped than fit into the pool, so draw a fresh
+        // selection on every refill instead of always taking the first ones.
+        shuffle($files);
 
         foreach ($files as $file) {
             $data = @file_get_contents($file);
