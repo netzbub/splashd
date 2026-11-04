@@ -17,9 +17,7 @@
             }
         }
 
-        let request = new Request(metadata);
-
-        fetch(request, headers)
+        fetch(metadata, headers)
             .then(response => response.json())
             .then(data => {
                 addMetadataToDOM(data)

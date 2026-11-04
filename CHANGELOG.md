@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.3 - 2026-11-04
+
+### Fixed
+- No setting on the admin page could be saved: the server refused every
+  write with HTTP 412 and logged nothing, because the request carried no
+  token. Nextcloud wraps `window.fetch` and, when called with a ready-made
+  `Request` object, replaces its headers with its own. The URL and the
+  options are passed separately now.
+
 ## 0.1.2 - 2026-11-04
 
 ### Fixed

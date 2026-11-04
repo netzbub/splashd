@@ -67,7 +67,12 @@
             redirect: 'error',
         };
 
-        fetch(new Request(saveUrl, options))
+        // The URL and the options have to be passed separately. Nextcloud wraps
+        // window.fetch, and when the second argument is missing the wrapper
+        // supplies its own headers, which replace the ones a ready-made Request
+        // object carries. The request token would be lost and the server would
+        // refuse the save with HTTP 412.
+        fetch(saveUrl, options)
             .then((response) => {
                 // A refused request still answers with JSON, so the status has
                 // to be looked at before the body is believed.
