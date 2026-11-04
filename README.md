@@ -1,8 +1,17 @@
 # Splashd — changing Nextcloud backgrounds from your own folder
 
-[![license: AGPL v3](https://img.shields.io/badge/License-AGPLv3-blue.svg)](LICENSE.md)
+<p align="center">
+  <img src="https://img.shields.io/github/v/tag/netzbub/splashd?label=version&color=blue" alt="version">
+  <img src="https://img.shields.io/github/license/netzbub/splashd?color=olive&cacheSeconds=3600" alt="license">
+  <img src="https://img.shields.io/github/last-commit/netzbub/splashd?color=blueviolet" alt="last commit">
+  <img src="https://img.shields.io/github/issues/netzbub/splashd?color=yellow" alt="open issues">
+  <img src="https://img.shields.io/badge/Nextcloud-35-0082C9?logo=nextcloud&logoColor=white" alt="Nextcloud 35">
+  <img src="https://img.shields.io/badge/PHP-8.3--8.5-777BB4?logo=php&logoColor=white" alt="PHP 8.3 to 8.5">
+</p>
 
 Shows a changing background image on the Nextcloud login page and dashboard.
+
+🇩🇪 **Deutsche Fassung: [README.de.md](README.de.md)**
 
 This is a fork of the Nextcloud app [Splash](https://github.com/nextcloud/unsplash)
 (app id `unsplash`), brought up to Nextcloud 35 and rebuilt around one idea: the
