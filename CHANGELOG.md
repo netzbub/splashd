@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 - 2026-11-04
+
+### Added
+- The colour of the tint can be chosen. White is the default, so a low
+  vibrancy lightens the image and the full one leaves a plain white
+  background.
+
+### Changed
+- The tint no longer borrows the instance colour from the Theming app.
+
 ## 0.1.3 - 2026-11-04
 
 ### Fixed

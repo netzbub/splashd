@@ -41,6 +41,8 @@ Für den eigenen Ordner werden zwei Angaben gebraucht: ein **Konto** und ein **P
 
 Gelesen werden JPEG, PNG und WebP, alles andere im Ordner wird übergangen. Fehlt der Ordner oder ist er leer, wird das Anmeldebild aus Administrationseinstellungen > Design verwendet.
 
+Über das Bild lässt sich ein Farbschleier legen: Farbe wählen — voreingestellt Weiß — und dazu die Stärke, vom zarten Schleier bis zur volldeckenden Fläche. Daneben steht eine Unschärfe zur Verfügung.
+
 ## Wie die Bilder ausgeliefert werden
 
 Ein Hintergrundauftrag füllt den Vorrat einmal täglich auf. `/apps/splashd/api/image` liefert daraus ein Bild: bei jedem Aufruf ein zufälliges, oder den ganzen Tag dasselbe, je nach Einstellung. Der Endpunkt gibt nichts heraus außer den verkleinerten Kopien — keine Dateinamen, keine Pfade, keine Ordnerliste.

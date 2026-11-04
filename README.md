@@ -63,6 +63,10 @@ JPEG, PNG and WebP are read, everything else in the folder is ignored. If the
 folder is missing or empty, the login background from
 Administration settings > Theming is used instead.
 
+A tint can be laid over the image: pick the colour — white by default — and
+its vibrancy, from a faint veil to a fully opaque surface. A blur is available
+alongside it.
+
 ## How the images are served
 
 A background job refills the pool once a day. `/apps/splashd/api/image` then

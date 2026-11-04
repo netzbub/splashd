@@ -40,10 +40,12 @@ class SettingsService
     const POOL_RETRY_SECONDS = 600;
 
     const STYLE_TINT_ALLOWED = 'splashd/style/tint';
+    const STYLE_TINT_COLOR = 'splashd/style/tint/color';
     const STYLE_STRENGHT_COLOR = 'splashd/style/strength/color';
     const STYLE_STRENGHT_BLUR = 'splashd/style/strength/blur';
 
     const STYLE_TINT_ALLOWED_DEFAULT = 0; //equals 30%
+    const STYLE_TINT_COLOR_DEFAULT = '#ffffff';
     const STYLE_STRENGHT_COLOR_DEFAULT = 30; //equals 30%
     const STYLE_STRENGHT_BLUR_DEFAULT = 0;
 
@@ -288,13 +290,29 @@ class SettingsService
     }
 
     /**
-     * nextcloud theming main color
+     * The colour of the veil laid over the background image.
      *
-     * @param String $styleUrl
+     * White is the default: with a low vibrancy it lightens the image, with
+     * the full one the background turns plain white.
      */
-    public function getInstanceColor()
+    public function getTintColor(): string
     {
-        return $this->config->getAppValue('theming', 'color', $this->defaults->getColorPrimary());
+        $color = $this->config->getAppValue($this->appName, self::STYLE_TINT_COLOR, self::STYLE_TINT_COLOR_DEFAULT);
+        return $this->isHexColor($color) ? $color : self::STYLE_TINT_COLOR_DEFAULT;
+    }
+
+    public function setTintColor(string $color): void
+    {
+        $color = strtolower(trim($color));
+        if (!$this->isHexColor($color)) {
+            return;
+        }
+        $this->config->setAppValue($this->appName, self::STYLE_TINT_COLOR, $color);
+    }
+
+    private function isHexColor(string $color): bool
+    {
+        return (bool)preg_match('/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', $color);
     }
 
     /**

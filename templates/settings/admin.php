@@ -118,6 +118,17 @@ $providerLabels = [
             <label for="splashd-style-tinting"><?php p($l->t('Enable Tint')); ?></label>
         </div>
         <div class="splashd-slider">
+            <label for="splashd-style-tint-color"><?php p($l->t('Color of the tint')); ?></label>
+            <input
+                    id="splashd-style-tint-color"
+                    type="color"
+                    name="splashd-style-tint-color"
+                    data-setting="style/tint/color"
+                    value="<?php p($_['styleTintColor']); ?>"
+                <?= $_['styleTint'] ? '' : 'disabled' ?>
+            >
+        </div>
+        <div class="splashd-slider">
             <label for="splashd-style-color-strength"><?php p($l->t('Set the vibrancy of the color')); ?></label>
             <input
                     id="splashd-style-color-strength"
@@ -130,6 +141,9 @@ $providerLabels = [
                 <?= $_['styleTint'] ? '' : 'disabled' ?>
             >
         </div>
+        <p class="settings-hint">
+            <?php p($l->t('White is the default: a low vibrancy lightens the image, the full one leaves a plain white background.')); ?>
+        </p>
         <div class="splashd-slider">
             <label for="splashd-style-blur"><?php p($l->t('Set the blur of the image')); ?></label>
             <input type="range" name="splashd-style-blur" data-setting="style/strength/blur" min="0" max="25"

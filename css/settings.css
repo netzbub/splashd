@@ -76,3 +76,11 @@
     object-fit: cover;
     object-position: center;
 }
+/* The colour swatch must not take the width of the sliders next to it. */
+#splashd-style-tint-color {
+    min-width: 0;
+    width: 60px;
+    height: 34px;
+    padding: 2px;
+    cursor: pointer;
+}

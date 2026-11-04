@@ -128,7 +128,7 @@ class CssController extends Controller
         $css = "";
         $tintEnabled = $this->settings->isTintEnabled();
         if ($tintEnabled == 1) {
-            [$r, $g, $b] = $this->tintRgb($this->settings->getInstanceColor());
+            [$r, $g, $b] = $this->tintRgb($this->settings->getTintColor());
             $colorStrenght = $this->settings->getColorStrength() / 100;
             $css .= "background-color: #fff !important;";
             $css .= "background-image: ";

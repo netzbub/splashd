@@ -39,6 +39,8 @@
     "Images are taken from %1$s, restricted to %2$s and %3$s, which require no attribution. The server downloads them once a day; the visitors' browsers never contact Openverse." : "Die Bilder kommen von %1$s, beschränkt auf %2$s und %3$s, die keine Namensnennung verlangen. Der Server lädt sie einmal täglich; die Browser der Besucher nehmen nie Verbindung zu Openverse auf.",
     "The images shipped with this app are licensed %s, created by netzbub." : "Die mit dieser App gelieferten Bilder stehen unter %s, erstellt von netzbub.",
     "This app is made using the Openverse API but is not endorsed or certified by Openverse." : "Diese App nutzt die Openverse-API, wird von Openverse aber nicht befürwortet oder zertifiziert.",
-    "The images come from a folder of this Nextcloud. Nothing is requested from a third party, and only the scaled copies are handed out - no file names, no paths, no folder listing." : "Die Bilder kommen aus einem Ordner dieser Nextcloud. Es wird nichts bei Dritten angefragt, und herausgegeben werden nur die verkleinerten Kopien – keine Dateinamen, keine Pfade, keine Ordnerliste."
+    "The images come from a folder of this Nextcloud. Nothing is requested from a third party, and only the scaled copies are handed out - no file names, no paths, no folder listing." : "Die Bilder kommen aus einem Ordner dieser Nextcloud. Es wird nichts bei Dritten angefragt, und herausgegeben werden nur die verkleinerten Kopien – keine Dateinamen, keine Pfade, keine Ordnerliste.",
+    "Color of the tint" : "Farbe des Schleiers",
+    "White is the default: a low vibrancy lightens the image, the full one leaves a plain white background." : "Voreingestellt ist Weiß: eine geringe Stärke hellt das Bild auf, die volle Stärke lässt einen rein weißen Hintergrund."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -64,6 +64,7 @@ class AdminSettings implements ISettings
             'poolCount' => $this->settings->getPoolCount(),
             'changeMode' => $this->settings->getChangeMode(),
             'styleTint' => $this->settings->isTintEnabled(),
+            'styleTintColor' => $this->settings->getTintColor(),
             'styleStrengthColor' => $this->settings->getColorStrength(),
             'styleStrengthBlur' => $this->settings->getBlurStrength(),
             'styleHighVisibility' => $this->settings->isHighVisibilityLogin(),

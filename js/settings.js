@@ -40,7 +40,12 @@
                     value = e.target.checked ? 'true' : 'false';
                 }
                 if (e.target.dataset.setting === 'style/tint') {
-                    document.getElementById('splashd-style-color-strength').disabled = value !== 'true';
+                    for (const id of ['splashd-style-color-strength', 'splashd-style-tint-color']) {
+                        const field = document.getElementById(id);
+                        if (field !== null) {
+                            field.disabled = value !== 'true';
+                        }
+                    }
                 }
                 save(e.target.dataset.setting, value, type);
             });

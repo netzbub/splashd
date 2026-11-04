@@ -68,6 +68,9 @@ class AdminSettingsController extends Controller
             case 'style/tint':
                 $this->settings->setTint($value ? 1 : 0);
                 break;
+            case 'style/tint/color':
+                $this->settings->setTintColor((string)$value);
+                break;
             case 'style/strength/color':
                 $this->settings->setColorStrength((int)filter_var($value, FILTER_SANITIZE_NUMBER_INT));
                 break;
@@ -105,6 +108,7 @@ class AdminSettingsController extends Controller
             'style/dashboard' => $this->settings->getServerStyleDashboardEnabled(),
             'change/mode' => $this->settings->getChangeMode(),
             'style/tint' => $this->settings->isTintEnabled(),
+            'style/tint/color' => $this->settings->getTintColor(),
             'style/strength/color' => (int)$this->settings->getColorStrength(),
             'style/strength/blur' => (int)$this->settings->getBlurStrength(),
             'style/login/highvisibility' => $this->settings->isHighVisibilityLogin(),
