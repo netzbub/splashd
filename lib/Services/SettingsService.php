@@ -105,14 +105,21 @@ class SettingsService
      */
     public function getUserStyleDashboardEnabled(): bool
     {
-        // for magic value see: https://github.com/nextcloud/server/blame/master/apps/theming/lib/Service/BackgroundService.php
-        $themingAppDashboard = $this->config->getUserValue($this->userId, "theming", "background_image", 'default');
-
-        // dont add custom css when custom image was selected
-        if ($themingAppDashboard == 'default') {
-            return $this->getServerStyleDashboardEnabled();
+        if (!$this->getServerStyleDashboardEnabled()) {
+            return false;
         }
-        return false;
+        if ($this->userId === null) {
+            return true;
+        }
+
+        // Step aside only when this user picked a background image of their
+        // own under Appearance. Nextcloud also writes this value when only a
+        // colour was chosen, and a colour is not an image, so it does not
+        // stand in our way.
+        // For the values see apps/theming/lib/Service/BackgroundService.php
+        $themingAppDashboard = $this->config->getUserValue($this->userId, 'theming', 'background_image', 'default');
+
+        return in_array($themingAppDashboard, ['default', 'color', 'disabled'], true);
     }
 
     /**

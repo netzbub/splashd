@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.1 - 2026-11-04
+
+### Fixed
+- The settings page reported "Saved" even when the server had refused the
+  request, because only the answer body was looked at and never its status.
+  The status is now checked, and every answer carries the value as it stands
+  in the configuration afterwards, which the page puts back into the field.
+  A write that does not take hold is therefore visible at once.
+- The dashboard background stayed empty once a user had picked anything but
+  the default under Appearance. Only a background image of the user's own now
+  takes precedence; a plain background colour no longer suppresses the app.
+- The tint was dropped without a trace when the theming colour was not in the
+  long hexadecimal form, because one empty colour channel makes the whole CSS
+  rule invalid. Short form and unusable values are now handled.
+
 ## 0.1.0 - 2026-11-03
 
 First release of the Splashd fork (app id `splashd`), based on Splash 3.2.0

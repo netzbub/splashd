@@ -84,7 +84,32 @@ class AdminSettingsController extends Controller
                 return new JSONResponse(['status' => 'error'], Http::STATUS_BAD_REQUEST);
         }
 
-        return new JSONResponse(['status' => $value]);
+        // Report the value as it now stands in the configuration, so that the
+        // settings page shows what was really stored and not what was sent.
+        return new JSONResponse([
+            'status' => 'ok',
+            'key' => $key,
+            'stored' => $this->readBack($key),
+        ]);
+    }
+
+    /**
+     * Read one setting back after it was written.
+     *
+     * @return bool|int|string|null null when the key has no simple value
+     */
+    private function readBack(string $key): bool|int|string|null
+    {
+        return match ($key) {
+            'style/login' => $this->settings->getServerStyleLoginEnabled(),
+            'style/dashboard' => $this->settings->getServerStyleDashboardEnabled(),
+            'change/mode' => $this->settings->getChangeMode(),
+            'style/tint' => $this->settings->isTintEnabled(),
+            'style/strength/color' => (int)$this->settings->getColorStrength(),
+            'style/strength/blur' => (int)$this->settings->getBlurStrength(),
+            'style/login/highvisibility' => $this->settings->isHighVisibilityLogin(),
+            default => null,
+        };
     }
 
     /**

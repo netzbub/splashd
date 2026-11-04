@@ -68,7 +68,14 @@
         };
 
         fetch(new Request(saveUrl, options))
-            .then((response) => response.json())
+            .then((response) => {
+                // A refused request still answers with JSON, so the status has
+                // to be looked at before the body is believed.
+                if (!response.ok) {
+                    throw new Error('splashd: saving ' + key + ' failed with HTTP ' + response.status);
+                }
+                return response.json();
+            })
             .then((data) => {
                 message('success');
                 if (key === 'provider/provider') {
@@ -91,6 +98,18 @@
      * @private
      */
     function apply(data) {
+        // Show the value the server read back, so that a write that did not
+        // take hold is visible at once instead of leaving a green "Saved".
+        if (data.hasOwnProperty('key') && data.stored !== null && data.stored !== undefined) {
+            const field = document.querySelector(`[data-setting="${data.key}"]`);
+            if (field !== null) {
+                if (field.getAttribute('type') === 'checkbox') {
+                    field.checked = data.stored === true || data.stored === 1;
+                } else {
+                    field.value = data.stored;
+                }
+            }
+        }
         if (data.hasOwnProperty('poolCount')) {
             setCount('splashd-pool-count', data.poolCount,
                 t('splashd', '%n image ready on the server.', '%n images ready on the server.', data.poolCount));

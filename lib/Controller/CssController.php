@@ -128,8 +128,7 @@ class CssController extends Controller
         $css = "";
         $tintEnabled = $this->settings->isTintEnabled();
         if ($tintEnabled == 1) {
-            $tintColor = $this->settings->getInstanceColor();
-            list($r, $g, $b) = sscanf($tintColor, "#%02x%02x%02x");
+            [$r, $g, $b] = $this->tintRgb($this->settings->getInstanceColor());
             $colorStrenght = $this->settings->getColorStrength() / 100;
             $css .= "background-color: #fff !important;";
             $css .= "background-image: ";
@@ -142,6 +141,32 @@ class CssController extends Controller
             $css .= "background-blend-mode: normal, multiply;";
         }
         return $css;
+    }
+
+    /**
+     * Read a theming colour as three channels.
+     *
+     * The short form #abc and an unusable value have to be caught, because a
+     * single empty channel would make the whole rule invalid and the tint
+     * would silently do nothing.
+     *
+     * @return array{int, int, int}
+     */
+    private function tintRgb(string $color): array
+    {
+        $hex = ltrim(trim($color), '#');
+        if (preg_match('/^[0-9a-f]{3}$/i', $hex)) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        if (!preg_match('/^[0-9a-f]{6}$/i', $hex)) {
+            // Nextcloud's own default primary colour.
+            $hex = '00679e';
+        }
+        return [
+            (int)hexdec(substr($hex, 0, 2)),
+            (int)hexdec(substr($hex, 2, 2)),
+            (int)hexdec(substr($hex, 4, 2)),
+        ];
     }
 
     private function getBlurStyle(): string

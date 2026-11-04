@@ -7,7 +7,7 @@
     <summary lang="de">Wechselndes Hintergrundbild für Anmeldeseite und Dashboard aus einem eigenen Ordner</summary>
     <description>Shows a changing background image on the login page and the dashboard. Images come from a folder inside your own Nextcloud, or optionally from Openverse under CC0 and Public Domain terms. Images are fetched and scaled on the server, so no request leaves the visitor's browser. This app is made using the Openverse API but is not endorsed or certified by Openverse. Fork of the Nextcloud Splash app (unsplash).</description>
     <description lang="de">Zeigt ein wechselndes Hintergrundbild auf der Anmeldeseite und im Dashboard. Die Bilder kommen aus einem Ordner der eigenen Nextcloud, wahlweise auch von Openverse unter CC0 und Public Domain. Die Bilder werden auf dem Server geholt und verkleinert, es geht keine Anfrage vom Browser der Besucher nach außen. Diese App nutzt die Openverse-API, wird von Openverse aber nicht befürwortet oder zertifiziert. Fork der Nextcloud-App Splash (unsplash).</description>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <licence>AGPL-3.0-or-later</licence>
     <author homepage="https://jancborchardt.net">Jan C. Borchardt</author>
     <author homepage="https://github.com/marius-wieschollek">Marius Wieschollek</author>
