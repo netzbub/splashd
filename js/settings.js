@@ -72,7 +72,9 @@
                 // A refused request still answers with JSON, so the status has
                 // to be looked at before the body is believed.
                 if (!response.ok) {
-                    throw new Error('splashd: saving ' + key + ' failed with HTTP ' + response.status);
+                    const error = new Error('splashd: saving ' + key + ' failed');
+                    error.status = response.status;
+                    throw error;
                 }
                 return response.json();
             })
@@ -88,7 +90,7 @@
             })
             .catch((e) => {
                 console.error(e);
-                message('error');
+                message('error', e.status ? 'HTTP ' + e.status : e.message);
             });
     }
 
@@ -151,14 +153,20 @@
      *
      * @private
      */
-    function message(type) {
+    function message(type, detail) {
         const element = document.querySelector(`#splashd-settings .msg.${type}`);
         if (element === null) {
             return;
         }
+        // Keep the translated label and append what went wrong, so the reason
+        // can be read off the page instead of the browser console.
+        if (element.dataset.label === undefined) {
+            element.dataset.label = element.textContent.trim();
+        }
+        element.textContent = detail ? `${element.dataset.label} (${detail})` : element.dataset.label;
         element.classList.add('active');
         clearTimeout(timers[type]);
-        timers[type] = setTimeout(() => element.classList.remove('active'), 1000);
+        timers[type] = setTimeout(() => element.classList.remove('active'), detail ? 15000 : 1000);
     }
 
     initialize();

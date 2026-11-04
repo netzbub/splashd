@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2 - 2026-11-04
+
+### Changed
+- The failure marker on the settings page now names the reason, for example
+  "Failed (HTTP 412)", and stays legible for a few seconds. Without it the
+  cause of a refused write could only be read from the browser console.
+
 ## 0.1.1 - 2026-11-04
 
 ### Fixed
