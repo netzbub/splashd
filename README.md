@@ -21,6 +21,8 @@ background must not cost the visitors of a login page their IP address.
   applications in their API terms, Wallhaven grants no reuse rights at all,
   and Bing images are not licensed for redistribution. The one source left is
   Openverse, limited to CC0 and Public Domain Mark, which need no attribution.
+  This app is made using the Openverse API but is not endorsed or certified
+  by Openverse.
 * **A pool instead of one image.** The provider prepares a set of scaled
   images; the background can therefore change on every single visit, not only
   once a day.

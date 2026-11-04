@@ -11,3 +11,5 @@ $links = [
 ];
 
 print_unescaped($l->t('Images are taken from %1$s, restricted to %2$s and %3$s, which require no attribution. The server downloads them once a day; the visitors\' browsers never contact Openverse.', $links));
+print_unescaped(' ');
+print_unescaped($l->t('This app is made using the Openverse API but is not endorsed or certified by Openverse.'));
