@@ -40,11 +40,15 @@ class AdminSettings implements ISettings
     public function getForm(): TemplateResponse
     {
         return new TemplateResponse('splashd', 'settings/admin', [
-            'saveSettingsUrl' => $this->urlGenerator->linkToRouteAbsolute('splashd.admin_settings.set'),
+            // Relative, not absolute: behind a reverse proxy an absolute URL can
+            // carry a different host or scheme than the page itself, and the
+            // browser then treats the save as a foreign request and drops the
+            // session cookie with it.
+            'saveSettingsUrl' => $this->urlGenerator->linkToRoute('splashd.admin_settings.set'),
             'requestCustomizationUrl' =>
-                $this->urlGenerator->linkToRouteAbsolute(
+                $this->urlGenerator->linkToRoute(
                     'splashd.admin_settings.getCustomization',
-                    array('providername' => $this->settings->getImageProviderName())
+                    ['providername' => $this->settings->getImageProviderName()]
                 ),
             'styleLogin' => $this->settings->getServerStyleLoginEnabled(),
             'styleDashboard' => $this->settings->getServerStyleDashboardEnabled(),

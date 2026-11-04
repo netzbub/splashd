@@ -2,6 +2,13 @@
 
 ## 0.1.2 - 2026-11-04
 
+### Fixed
+- The settings page addressed its own save endpoint by absolute URL. Behind a
+  reverse proxy that URL can carry a different host or scheme than the page
+  itself, in which case the browser treats the save as a foreign request and
+  sends no session cookie with it, so the server refuses it. The address is
+  relative now.
+
 ### Changed
 - The failure marker on the settings page now names the reason, for example
   "Failed (HTTP 412)", and stays legible for a few seconds. Without it the
