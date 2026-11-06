@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.1 - 2026-11-06
+
+### Fixed
+- Logging out ended on an error page. The logout route renders a login
+  template, and the app asked that event whether somebody was logged in.
+  Only the event of the regular rendering path answers that question, so
+  Nextcloud aborted with "Call to undefined method
+  BeforeLoginTemplateRenderedEvent::isLoggedIn()". The question is now put
+  only where it can be answered.
+
 ## 0.2.0 - 2026-11-04
 
 ### Added

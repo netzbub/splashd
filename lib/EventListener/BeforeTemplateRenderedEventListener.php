@@ -47,6 +47,13 @@ class BeforeTemplateRenderedEventListener implements IEventListener
         }
 
         $route = $this->request->getParam('_route');
+
+        // Only the event of the regular rendering path knows about a session.
+        // BeforeLoginTemplateRenderedEvent carries no isLoggedIn(), and asking
+        // it ends the request with a fatal error. That happens on every logout,
+        // because the logout route renders a login template.
+        $isLoggedIn = $event instanceof BeforeTemplateRenderedEvent && $event->isLoggedIn();
+
         $serverstyleDash = $this->settingsService->getUserStyleDashboardEnabled();
         $serverstyleLogin = $this->settingsService->getServerStyleLoginEnabled();
 
@@ -66,13 +73,13 @@ class BeforeTemplateRenderedEventListener implements IEventListener
                 }
                 break;
             case 'dashboard.dashboard.index':
-                if ($event->isLoggedIn() && $serverstyleDash) {
+                if ($isLoggedIn && $serverstyleDash) {
                     $this->addHeaderFor('dashboard');
                     $this->addMetadata();
                 }
                 break;
             default:
-                if ($event->isLoggedIn()) {
+                if ($isLoggedIn) {
                     if ($serverstyleDash) {
                         $this->addHeaderFor('dashboard');
                     }
