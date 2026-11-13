@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2 - 2026-11-13
+
+### Added
+- A screenshot of the admin settings for the Nextcloud App Store.
+
 ## 0.2.1 - 2026-11-06
 
 ### Fixed
