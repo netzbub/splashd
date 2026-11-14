@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.3 - 2026-11-14
+
+### Changed
+- App Store gallery: a collage of sample backgrounds as first picture.
+- The fork author is listed with the full name.
+
 ## 0.2.2 - 2026-11-13
 
 ### Added
